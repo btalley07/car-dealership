@@ -1,0 +1,111 @@
+--salesperson insert
+
+INSERT INTO salesperson(
+	salesperson_id, 
+	first_name,
+	last_name,
+	cars_sold
+)VALUES(
+	1,
+	'Alex',
+	'Tymczyszyn',
+	100
+);
+
+INSERT INTO salesperson(
+	salesperson_id, 
+	first_name,
+	last_name,
+	cars_sold
+)VALUES(
+	2,
+	'Steve',
+	'Yoon',
+	1000
+);
+
+--mechanic insert--
+INSERT INTO mechanic(
+	mechanic_id,
+	first_name,
+	last_name
+)VALUES(
+	1,
+	'Guiness',
+	'Anayapig'
+);
+
+INSERT INTO mechanic(
+	mechanic_id,
+	first_name,
+	last_name
+)VALUES(
+	2,
+	'Delta',
+	'Doofenschmirtz'
+);
+
+
+--service insert
+INSERT INTO service(
+	service_id,
+	part_id,
+	repair_cost,
+	mechanic_id
+)VALUES(
+	1,
+	'thingymabobber',
+	5000.63,
+	1
+);
+
+INSERT INTO service(
+	service_id,
+	part_id,
+	repair_cost,
+	mechanic_id
+)VALUES(
+	2,
+	'hooboobabalooooo',
+	10000.26,
+	2
+);
+
+--customer insert
+CREATE OR REPLACE FUNCTION add_customer(_customer_id INTEGER, _first_name VARCHAR, _last_name VARCHAR, _address VARCHAR, _billing_info VARCHAR, _service_id INTEGER)
+RETURNS void 
+AS $MAIN$
+BEGIN
+	INSERT INTO customer(customer_id,first_name,last_name,address,billing_info,service_id)
+	VALUES(_customer_id, _first_name, _last_name, _address,_billing_info,_service_id);
+END;
+$MAIN$
+LANGUAGE plpgsql;
+SELECT add_customer(1,'Allyse','Arucan','101 Awesome way','visa',1)
+SELECT add_customer(2, 'Blair','Talley','303 What the heck','amex',2)
+
+--invoice insert
+CREATE OR REPLACE FUNCTION add_invoice(_invoice_id INTEGER,_date_ TIMESTAMP WITHOUT TIME ZONE,_customer_id INTEGER)
+RETURNS void 
+AS $MAIN$
+BEGIN
+	INSERT INTO invoice(invoice_id,date_,customer_id)
+	VALUES(_invoice_id,_date_,_customer_id);
+END;
+$MAIN$
+LANGUAGE plpgsql;
+SELECT add_invoice(1,NOW()::timestamp,1)
+SELECT add_invoice(2,NOW()::timestamp,2)
+
+--car insert
+CREATE OR REPLACE FUNCTION add_car(_vin_number VARCHAR,_make VARCHAR,_model VARCHAR,_year_ INTEGER,_color VARCHAR,_price NUMERIC,_salesperson_id INTEGER,_invoice_id INTEGER)
+RETURNS void
+AS $MAIN$
+BEGIN
+	INSERT INTO car(vin_number,make,model,year_,color,price,salesperson_id,invoice_id)
+	VALUES(_vin_number, _make,_model,_year_,_color,_price,_salesperson_id,_invoice_id);
+END;
+$MAIN$
+LANGUAGE plpgsql;
+SELECT add_car('123456789','Ford','Bronco',2021,'black',45000.99,1,1)
+SELECT add_car('987654321','Toyota','Tundra',2021,'white',35231.59,2,2)
